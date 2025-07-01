@@ -1,4 +1,5 @@
 import PostList from "./components/post-list";
+import { Suspense } from "react";
 import UserProfile from "./components/user-profile";
 
 // 서버 컴포넌트
@@ -11,7 +12,10 @@ export default async function Home() {
   return (
     <div>
       <UserProfile name={userData.name} email={userData.email} />
-      <PostList postsPromise={postsData} />
+      {/* Suspense 없으면 로딩될 때까지 멈춤 */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <PostList postsPromise={postsData} />
+      </Suspense>
     </div>
   );
 }
