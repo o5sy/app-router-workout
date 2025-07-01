@@ -1,14 +1,17 @@
+import PostList from "./components/post-list";
+import UserProfile from "./components/user-profile";
+
 // 서버 컴포넌트
 export default async function Home() {
   const userData = await fetchUserData();
 
-  // 덜 중요한 데이터
-  const postsData = await fetchPosts();
+  // 덜 중요하고 오래 걸리는 작업
+  const postsData = fetchSlowPosts();
 
   return (
     <div>
-      <div>프로필</div>
-      <ol>게시물 목록</ol>
+      <UserProfile name={userData.name} email={userData.email} />
+      <PostList postsPromise={postsData} />
     </div>
   );
 }
@@ -22,7 +25,10 @@ async function fetchUserData() {
   return data;
 }
 
-async function fetchPosts() {
+async function fetchSlowPosts() {
+  // 의도적 지연 시간
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   const response = await fetch(
     "https://jsonplaceholder.typicode.com/posts?_limit=5"
   );
