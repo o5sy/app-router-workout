@@ -1,4 +1,5 @@
 import Error from "./error";
+import ErrorBoundary from "./components/error-boundary";
 import ErrorTriggerButton from "./components/error-trigger-button";
 import PostList from "./components/post-list";
 import { Suspense } from "react";
@@ -18,7 +19,9 @@ export default async function Home() {
       <Suspense fallback={<div>Loading...</div>}>
         <PostList postsPromise={postsData} />
       </Suspense>
-      <ErrorTriggerButton />
+      <ErrorBoundary fallback={<div>Error</div>}>
+        <ErrorTriggerButton />
+      </ErrorBoundary>
     </div>
   );
 }
