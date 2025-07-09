@@ -15,9 +15,14 @@ export default async function Home() {
 
   return (
     <div>
-      <Link href="/posts" className="text-blue-500 underline">
-        게시물 목록
-      </Link>
+      <nav className="flex gap-4">
+        <Link href="/posts" className="text-blue-500 underline">
+          게시물 목록
+        </Link>
+        <Link href="/notes" className="text-blue-500 underline">
+          메모
+        </Link>
+      </nav>
 
       <div className="pt-4">
         <h2>데이터 조회 테스트</h2>
