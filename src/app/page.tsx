@@ -1,4 +1,3 @@
-import Error from "./error";
 import ErrorBoundary from "./components/error-boundary";
 import ErrorTriggerButton from "./components/error-trigger-button";
 import PostList from "./components/post-list";
@@ -53,7 +52,8 @@ async function fetchSlowPosts() {
   );
   const data = await response.json();
   if (!response.ok) {
-    throw new Error("Failed to fetch posts");
+    // throw new Error("Failed to fetch posts");
+    notFound();
   }
   return data;
 }
