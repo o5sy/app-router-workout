@@ -1,5 +1,6 @@
 import ErrorBoundary from "./components/error-boundary";
 import ErrorTriggerButton from "./components/error-trigger-button";
+import Link from "next/link";
 import PostList from "./components/post-list";
 import { Suspense } from "react";
 import UserProfile from "./components/user-profile";
@@ -14,15 +15,22 @@ export default async function Home() {
 
   return (
     <div>
-      <UserProfile name={userData.name} email={userData.email} />
-      {/* Suspense 없으면 로딩될 때까지 멈춤 */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <PostList postsPromise={postsData} />
-      </Suspense>
-      {/* 컴포넌트 단위 에러 처리 */}
-      <ErrorBoundary fallback={<div>Error</div>}>
-        <ErrorTriggerButton />
-      </ErrorBoundary>
+      <Link href="/posts" className="text-blue-500 underline">
+        게시물 목록
+      </Link>
+
+      <div className="pt-4">
+        <h2>데이터 조회 테스트</h2>
+        <UserProfile name={userData.name} email={userData.email} />
+        {/* Suspense 없으면 로딩될 때까지 멈춤 */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <PostList postsPromise={postsData} />
+        </Suspense>
+        {/* 컴포넌트 단위 에러 처리 */}
+        <ErrorBoundary fallback={<div>Error</div>}>
+          <ErrorTriggerButton />
+        </ErrorBoundary>
+      </div>
     </div>
   );
 }

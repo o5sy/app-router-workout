@@ -16,7 +16,6 @@ export default async function PostsPage() {
         {posts.map((post: { id: number; title: string }) => (
           <li key={post.id}>
             <h2>{post.title}</h2>
-            {/* <p>{post.body}</p> */}
           </li>
         ))}
       </ul>
@@ -25,6 +24,9 @@ export default async function PostsPage() {
 }
 
 async function getPosts() {
+  // loading.tsx 확인하기 위한 의도적 지연
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   // 프로덕션에서만 동작함
   // 개발 환경에서는 fetch 요청이 캐시되지 않는다고 함
   const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
