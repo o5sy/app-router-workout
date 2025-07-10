@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Posts",
+  description: "게시물 목록 페이지입니다. 다양한 게시물을 탐색해보세요.",
 };
 
 export default async function PostsPage() {
