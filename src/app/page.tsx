@@ -22,6 +22,9 @@ export default async function Home() {
         <Link href="/notes" className="text-blue-500 underline">
           메모
         </Link>
+        <Link href="/tanstack-query" className="text-blue-500 underline">
+          Tanstack Query 테스트
+        </Link>
       </nav>
 
       <div className="pt-4">

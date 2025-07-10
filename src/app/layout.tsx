@@ -2,6 +2,7 @@ import "./globals.css";
 
 import Link from "next/link";
 import type { Metadata } from "next";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "My Next.js App",
@@ -38,7 +39,9 @@ export default function RootLayout({
           </Link>
         </header>
 
-        <main className="p-4">{children}</main>
+        <main className="p-4">
+          <Providers>{children}</Providers>
+        </main>
 
         <footer className="p-4 text-center border-t border-gray-300 mt-4">
           <p>&copy; Next.js App Router Demo</p>
