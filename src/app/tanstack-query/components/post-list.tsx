@@ -1,16 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 function PostList() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["client-posts"],
+    queryKey: ["posts"],
     queryFn: () =>
       fetch("https://jsonplaceholder.typicode.com/posts").then((res) =>
         res.json()
       ),
     staleTime: 3000,
   });
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
