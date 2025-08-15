@@ -8,13 +8,13 @@ import { notFound } from "next/navigation";
 
 // 서버 컴포넌트
 export default async function Home() {
+  // prefetch (await는 서버 컴포넌트의 렌더링을 차단하므로, 덜 중요하고 오래 걸리는 작업이라면 클라이언트 컴포넌트에서 use() 훅으로 리졸브해서 사용)
   const userData = await fetchUserData();
-
-  // 덜 중요하고 오래 걸리는 작업
-  const postsData = fetchSlowPosts();
+  const posts = await fetchPosts();
 
   return (
     <div>
+      {/* navigation */}
       <nav className="flex gap-4">
         <Link href="/posts" className="text-blue-500 underline">
           게시물 목록
@@ -27,13 +27,24 @@ export default async function Home() {
         </Link>
       </nav>
 
-      <div className="pt-4">
-        <h2>데이터 조회 테스트</h2>
+      {/* test contents */}
+      <div className="pt-4 flex flex-col gap-2">
+        {/* user information */}
         <UserProfile name={userData.name} email={userData.email} />
-        {/* Suspense 없으면 로딩될 때까지 멈춤 */}
-        <Suspense fallback={<div>Loading...</div>}>
-          <PostList postsPromise={postsData} />
-        </Suspense>
+
+        {/* posts */}
+        <div>
+          <h2 className="text-2xl">게시물</h2>
+
+          {/* prefetched data 서버 컴포넌트에 렌더링 */}
+          <div>글 갯수: {posts.length}</div>
+
+          {/* Suspense 없으면 로딩될 때까지 멈춤 */}
+          <Suspense fallback={<div>Loading...</div>}>
+            <PostList posts={posts} />
+          </Suspense>
+        </div>
+
         {/* 컴포넌트 단위 에러 처리 */}
         <ErrorBoundary fallback={<div>Error</div>}>
           <ErrorTriggerButton />
@@ -59,16 +70,16 @@ async function fetchUserData() {
   return data;
 }
 
-async function fetchSlowPosts() {
+async function fetchPosts() {
   // 의도적 지연 시간
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  const response = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=5"
-  );
-  const data = await response.json();
-  if (!response.ok) {
-    // throw new Error("Failed to fetch posts");
+  // 태그 추가
+  const res = await fetch("http://localhost:3001/posts", {
+    next: { tags: ["posts"] },
+  });
+  const data = await res.json();
+  if (!res.ok) {
     notFound();
   }
   return data;

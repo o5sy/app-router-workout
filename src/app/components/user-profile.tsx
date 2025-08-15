@@ -8,8 +8,9 @@ interface UserProfileProps {
 function UserProfile({ name, email }: UserProfileProps) {
   return (
     <div>
-      <h1>{name}</h1>
-      <p>{email}</p>
+      <h2 className="text-2xl">USER</h2>
+      <p>name: {name}</p>
+      <p>email: {email}</p>
     </div>
   );
 }
