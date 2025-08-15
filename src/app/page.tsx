@@ -1,3 +1,9 @@
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+
 import ErrorBoundary from "./components/error-boundary";
 import ErrorTriggerButton from "./components/error-trigger-button";
 import Link from "next/link";
@@ -10,47 +16,61 @@ import { notFound } from "next/navigation";
 export default async function Home() {
   // prefetch (await는 서버 컴포넌트의 렌더링을 차단하므로, 덜 중요하고 오래 걸리는 작업이라면 클라이언트 컴포넌트에서 use() 훅으로 리졸브해서 사용)
   const userData = await fetchUserData();
-  const posts = await fetchPosts();
+  // const posts = await fetchPosts();
+
+  const queryClient = new QueryClient();
+  const posts = await queryClient.fetchQuery({
+    queryKey: ["posts2"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:3001/posts", {
+        next: { tags: ["posts2"] },
+      });
+      const data = await res.json();
+      return data;
+    },
+  });
 
   return (
-    <div>
-      {/* navigation */}
-      <nav className="flex gap-4">
-        <Link href="/posts" className="text-blue-500 underline">
-          게시물 목록
-        </Link>
-        <Link href="/notes" className="text-blue-500 underline">
-          메모
-        </Link>
-        <Link href="/tanstack-query" className="text-blue-500 underline">
-          Tanstack Query 테스트
-        </Link>
-      </nav>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div>
+        {/* navigation */}
+        <nav className="flex gap-4">
+          <Link href="/posts" className="text-blue-500 underline">
+            게시물 목록
+          </Link>
+          <Link href="/notes" className="text-blue-500 underline">
+            메모
+          </Link>
+          <Link href="/tanstack-query" className="text-blue-500 underline">
+            Tanstack Query 테스트
+          </Link>
+        </nav>
 
-      {/* test contents */}
-      <div className="pt-4 flex flex-col gap-2">
-        {/* user information */}
-        <UserProfile name={userData.name} email={userData.email} />
+        {/* test contents */}
+        <div className="pt-4 flex flex-col gap-2">
+          {/* user information */}
+          <UserProfile name={userData.name} email={userData.email} />
 
-        {/* posts */}
-        <div>
-          <h2 className="text-2xl">게시물</h2>
+          {/* posts */}
+          <div>
+            <h2 className="text-2xl">게시물</h2>
 
-          {/* prefetched data 서버 컴포넌트에 렌더링 */}
-          <div>글 갯수: {posts.length}</div>
+            {/* prefetched data 서버 컴포넌트에 렌더링 */}
+            <div>글 갯수: {posts.length}</div>
 
-          {/* Suspense 없으면 로딩될 때까지 멈춤 */}
-          <Suspense fallback={<div>Loading...</div>}>
-            <PostList posts={posts} />
-          </Suspense>
+            {/* Suspense 없으면 로딩될 때까지 멈춤 */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <PostList />
+            </Suspense>
+          </div>
+
+          {/* 컴포넌트 단위 에러 처리 */}
+          <ErrorBoundary fallback={<div>Error</div>}>
+            <ErrorTriggerButton />
+          </ErrorBoundary>
         </div>
-
-        {/* 컴포넌트 단위 에러 처리 */}
-        <ErrorBoundary fallback={<div>Error</div>}>
-          <ErrorTriggerButton />
-        </ErrorBoundary>
       </div>
-    </div>
+    </HydrationBoundary>
   );
 }
 

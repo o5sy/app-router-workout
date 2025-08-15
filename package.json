@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start:test-server": "json-server --watch db.json --port 3001"
+    "start:test-server": "json-server --watch db.json --port 3001",
+    "test:http-request": "curl -X POST http://localhost:3001/posts -H \"Content-Type: application/json\" -d '{\"userId\": 1, \"title\": \"foo\", \"body\": \"bar\"}'"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.85.0",
