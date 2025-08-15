@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "홍길동",
+      "email": "hong@example.com"
+    },
+    {
+      "id": 2,
+      "name": "김철수",
+      "email": "kim@example.com"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "첫 번째 게시글",
+      "body": "111",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "title": "두 번째 게시글",
+      "body": "222",
+      "userId": 2
+    }
+  ]
+}
